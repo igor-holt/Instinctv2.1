@@ -2,6 +2,8 @@
 
 <div align="center">
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+
+[![Deploy to GitHub Pages](https://github.com/igor-holt/Instinctv2.1/actions/workflows/deploy.yml/badge.svg)](https://github.com/igor-holt/Instinctv2.1/actions/workflows/deploy.yml)
 </div>
 
 An AI-powered research platform exploring thermodynamic computing and "Energentic Intelligence" - where thermodynamic constraints drive AI orchestration.
@@ -69,6 +71,8 @@ research.genesisconductor.ai     (API Key Hidden)            generativelanguage.
 ## 🌐 Production Deployment
 
 The application automatically deploys to GitHub Pages when changes are pushed to the `main` branch.
+
+**📋 [Complete Deployment Checklist](./DEPLOYMENT.md)** - Follow this comprehensive guide for deployment
 
 ### GitHub Pages Setup
 
