@@ -1,8 +1,16 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey });
+// Configuration for API endpoint
+const isProduction = window.location.hostname === 'research.genesisconductor.ai';
+const workerEndpoint = process.env.WORKER_ENDPOINT || '';
+const useWorkerProxy = isProduction && workerEndpoint;
+
+// For local development, use the API key from environment
+const apiKey = !useWorkerProxy ? (process.env.API_KEY || '') : '';
+
+// Initialize the Google GenAI client only if not using worker proxy
+const ai = !useWorkerProxy && apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 const KATIA_SYSTEM_INSTRUCTION = `You are KATIA (K8), an Automated Techno-Intelligent Assistant for the Instinct Platform.
 
@@ -22,13 +30,37 @@ CAPABILITIES:
 TONE:
 Precise, technical, slightly futuristic, helpful, and authoritative on matters of thermodynamic computing.`;
 
+// Helper function to check if API is available
+function checkApiAvailability() {
+  if (!useWorkerProxy && !apiKey) {
+    return "API_KEY_MISSING";
+  }
+  if (useWorkerProxy && !workerEndpoint) {
+    return "WORKER_ENDPOINT_MISSING";
+  }
+  return null;
+}
+
 // 1. Chatbot (Pro model for complex reasoning with Flash fallback)
 export const streamChatMessage = async function* (
   history: { role: string; parts: { text: string }[] }[],
   message: string
 ) {
-  if (!apiKey) {
-    yield "API_KEY_MISSING";
+  const apiCheck = checkApiAvailability();
+  if (apiCheck) {
+    yield apiCheck;
+    return;
+  }
+
+  if (useWorkerProxy) {
+    // TODO: Implement worker proxy support for streaming chat
+    // For now, show message that production mode requires worker setup
+    yield "Production mode requires Cloudflare Worker setup. Please configure WORKER_ENDPOINT.";
+    return;
+  }
+
+  if (!ai) {
+    yield "API not initialized";
     return;
   }
 
@@ -76,7 +108,16 @@ export const streamChatMessage = async function* (
 
 // 2. Section Analysis (Pro model with fallback)
 export const analyzeResearchSection = async (text: string): Promise<string> => {
-  if (!apiKey) return "API Key Missing";
+  const apiCheck = checkApiAvailability();
+  if (apiCheck === "API_KEY_MISSING") return "API Key Missing";
+  if (apiCheck === "WORKER_ENDPOINT_MISSING") return "Worker Endpoint Missing";
+
+  if (useWorkerProxy) {
+    // TODO: Implement worker proxy support
+    return "Production mode requires Cloudflare Worker setup. Please configure WORKER_ENDPOINT.";
+  }
+
+  if (!ai) return "API not initialized";
 
   // Refined prompt for mobile-optimized, high-density technical insight
   const prompt = `Perform a high-density technical analysis of this Instinct Platform documentation excerpt.
@@ -116,7 +157,15 @@ export const analyzeResearchSection = async (text: string): Promise<string> => {
 
 // 3. Task Energy Classification (Flash Lite for speed)
 export const classifyTaskEnergy = async (taskDescription: string) => {
-    if (!apiKey) return null;
+    const apiCheck = checkApiAvailability();
+    if (apiCheck) return null;
+
+    if (useWorkerProxy) {
+        // TODO: Implement worker proxy support
+        return null;
+    }
+
+    if (!ai) return null;
 
     try {
         const response = await ai.models.generateContent({
@@ -148,7 +197,15 @@ export const classifyTaskEnergy = async (taskDescription: string) => {
 
 // 4. Image Editing (Gemini Flash Image)
 export const editImageWithGenAI = async (base64Image: string, prompt: string, mimeType: string) => {
-    if (!apiKey) return null;
+    const apiCheck = checkApiAvailability();
+    if (apiCheck) return null;
+
+    if (useWorkerProxy) {
+        // TODO: Implement worker proxy support
+        return null;
+    }
+
+    if (!ai) return null;
 
     try {
         const response = await ai.models.generateContent({
@@ -178,7 +235,15 @@ export const editImageWithGenAI = async (base64Image: string, prompt: string, mi
 
 // 5. Web Search (Search Grounding)
 export const performWebSearch = async (query: string) => {
-    if (!apiKey) return null;
+    const apiCheck = checkApiAvailability();
+    if (apiCheck) return null;
+
+    if (useWorkerProxy) {
+        // TODO: Implement worker proxy support
+        return null;
+    }
+
+    if (!ai) return null;
 
     try {
         const response = await ai.models.generateContent({
