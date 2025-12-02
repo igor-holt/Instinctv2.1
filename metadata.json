@@ -1,0 +1,5 @@
+{
+  "name": "The Instinct Platform",
+  "description": "A thermodynamic-aware AI orchestration platform implementing Energentic Intelligence. Features real-time hardware telemetry simulation and Gemini-powered decision gating.",
+  "requestFramePermissions": []
+}
