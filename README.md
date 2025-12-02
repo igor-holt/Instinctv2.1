@@ -31,6 +31,8 @@ research.genesisconductor.ai     (API Key Hidden)            generativelanguage.
 
 ## 🚀 Quick Start (Local Development)
 
+**📖 [Quick Start Guide](./QUICKSTART.md)** - Get running in 5 minutes!
+
 ### Prerequisites
 
 - Node.js 18+ 

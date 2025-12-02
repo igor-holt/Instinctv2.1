@@ -46,7 +46,8 @@ function checkRateLimit(ip) {
   // Clean up old entries (keep last 2 minutes)
   const prevMinute = minute - 2;
   for (const [k] of rateLimitMap) {
-    if (k.split(':')[1] < prevMinute) {
+    const entryMinute = parseInt(k.split(':')[1]);
+    if (entryMinute < prevMinute) {
       rateLimitMap.delete(k);
     }
   }

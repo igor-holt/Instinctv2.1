@@ -2,7 +2,9 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
 // Configuration for API endpoint
-const isProduction = window.location.hostname === 'research.genesisconductor.ai';
+// Production hostnames that should use worker proxy
+const PRODUCTION_HOSTNAMES = ['research.genesisconductor.ai', 'igor-holt.github.io'];
+const isProduction = PRODUCTION_HOSTNAMES.includes(window.location.hostname);
 const workerEndpoint = process.env.WORKER_ENDPOINT || '';
 const useWorkerProxy = isProduction && workerEndpoint;
 
@@ -53,8 +55,11 @@ export const streamChatMessage = async function* (
   }
 
   if (useWorkerProxy) {
-    // TODO: Implement worker proxy support for streaming chat
-    // For now, show message that production mode requires worker setup
+    // NOTE: Worker proxy streaming support requires additional implementation
+    // The current worker supports streaming, but the frontend integration needs
+    // to be completed. For now, production mode shows a configuration message.
+    // To enable: implement proper streaming response parsing using the worker's
+    // Transfer-Encoding: chunked responses and SSE (Server-Sent Events) format.
     yield "Production mode requires Cloudflare Worker setup. Please configure WORKER_ENDPOINT.";
     return;
   }

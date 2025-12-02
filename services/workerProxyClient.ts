@@ -10,8 +10,11 @@
 // In development, it can be empty to use direct API calls for testing
 const WORKER_ENDPOINT = process.env.WORKER_ENDPOINT || '';
 
+// Production hostnames that should use worker proxy
+const PRODUCTION_HOSTNAMES = ['research.genesisconductor.ai', 'igor-holt.github.io'];
+
 // Check if we should use the worker proxy
-const USE_WORKER_PROXY = WORKER_ENDPOINT && window.location.hostname === 'research.genesisconductor.ai';
+const USE_WORKER_PROXY = WORKER_ENDPOINT && PRODUCTION_HOSTNAMES.includes(window.location.hostname);
 
 /**
  * Make a request through the Cloudflare Worker proxy
@@ -87,4 +90,4 @@ async function* parseStreamingResponse(response: Response) {
   }
 }
 
-export { USE_WORKER_PROXY, WORKER_ENDPOINT, proxyRequest, parseStreamingResponse };
+export { USE_WORKER_PROXY, WORKER_ENDPOINT, PRODUCTION_HOSTNAMES, proxyRequest, parseStreamingResponse };
