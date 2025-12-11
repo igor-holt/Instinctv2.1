@@ -3,9 +3,19 @@ import { Icons } from './Icons';
 import { editImageWithGenAI } from '../services/geminiService';
 
 export const ImageEditor = () => {
-    const [image, setImage] = useState<string | null>(null);
-    const [mimeType, setMimeType] = useState<string>('');
-    const [prompt, setPrompt] = useState('');
+    // Whitelist of allowed image MIME types
+    const ALLOWED_MIME_TYPES = new Set([
+        'image/png',
+        'image/jpeg',
+       'image/jpg',
+       'image/gif',
+       'image/bmp',
+       'image/webp',
+       'image/svg+xml'
+   ]);
+   const [image, setImage] = useState<string | null>(null);
+   const [mimeType, setMimeType] = useState<string>('image/png');
+   const [prompt, setPrompt] = useState('');
     const [processedImage, setProcessedImage] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -14,7 +24,10 @@ export const ImageEditor = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setMimeType(file.type);
+        // Only allow safe image mime types; otherwise, default to image/png
+        const safeMimeType = ALLOWED_MIME_TYPES.has(file.type) ? file.type : 'image/png';
+        setMimeType(safeMimeType);
+
         const reader = new FileReader();
         reader.onloadend = () => {
             const base64String = reader.result as string;
