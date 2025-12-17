@@ -11,7 +11,7 @@
 const WORKER_ENDPOINT = process.env.WORKER_ENDPOINT || '';
 
 // Production hostnames that should use worker proxy
-const PRODUCTION_HOSTNAMES = ['research.genesisconductor.ai', 'igor-holt.github.io'];
+const PRODUCTION_HOSTNAMES = ['research.genesisconductor.io', 'igor-holt.github.io'];
 
 // Check if we should use the worker proxy
 const USE_WORKER_PROXY = WORKER_ENDPOINT && PRODUCTION_HOSTNAMES.includes(window.location.hostname);

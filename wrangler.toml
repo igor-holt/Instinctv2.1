@@ -11,7 +11,7 @@ compatibility_date = "2024-12-01"
 
 # For custom domain/route (optional)
 # routes = [
-#   { pattern = "api.research.genesisconductor.ai/*", zone_name = "genesisconductor.ai" }
+#   { pattern = "api.research.genesisconductor.io/*", zone_name = "genesisconductor.io" }
 # ]
 
 # Environment variables (public)

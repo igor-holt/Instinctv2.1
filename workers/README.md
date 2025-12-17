@@ -120,7 +120,7 @@ Client Request → Cloudflare Worker → Gemini API
 ### CORS Settings
 
 The worker is configured to allow requests from:
-- `https://research.genesisconductor.ai` (production)
+- `https://research.genesisconductor.io` (production)
 
 To add more domains, edit the `CORS_HEADERS` object in `gemini-proxy.js`:
 
@@ -136,7 +136,7 @@ For multiple domains, you can modify the code to check the origin dynamically:
 ```javascript
 function getCorsHeaders(origin) {
   const allowedOrigins = [
-    'https://research.genesisconductor.ai',
+    'https://research.genesisconductor.io',
     'https://your-other-domain.com',
   ];
   
@@ -175,7 +175,7 @@ You can use a custom domain instead of `*.workers.dev`:
 1. **Add a route in wrangler.toml**:
    ```toml
    routes = [
-     { pattern = "api.research.genesisconductor.ai/*", zone_name = "genesisconductor.ai" }
+     { pattern = "api.research.genesisconductor.io/*", zone_name = "genesisconductor.io" }
    ]
    ```
 

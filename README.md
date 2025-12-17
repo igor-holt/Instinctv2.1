@@ -8,7 +8,7 @@
 
 An AI-powered research platform exploring thermodynamic computing and "Energentic Intelligence" - where thermodynamic constraints drive AI orchestration.
 
-**Live Site**: [research.genesisconductor.ai](https://research.genesisconductor.ai)
+**Live Site**: [research.genesisconductor.io](https://research.genesisconductor.io)
 
 **AI Studio App**: https://ai.studio/apps/drive/1VN-izNTkI4aGIbMRUuT5hMBB3hJ6YR8k
 
@@ -19,7 +19,7 @@ This application uses a secure architecture designed for GitHub Pages hosting:
 ```
 Frontend (GitHub Pages)          Cloudflare Worker           Google Gemini API
    React/Vite App      ------>   Secure API Proxy   ------>  AI Services
-research.genesisconductor.ai     (API Key Hidden)            generativelanguage.googleapis.com
+research.genesisconductor.io     (API Key Hidden)            generativelanguage.googleapis.com
 ```
 
 ### Why This Architecture?
@@ -85,12 +85,12 @@ The application automatically deploys to GitHub Pages when changes are pushed to
    - The workflow will automatically build and deploy
 
 2. **Configure Custom Domain (Optional)**
-   - In GitHub Pages settings, add your custom domain: `research.genesisconductor.ai`
+   - In GitHub Pages settings, add your custom domain: `research.genesisconductor.io`
    - The `CNAME` file is already included in the repository
 
 ### DNS Configuration
 
-To use the custom domain `research.genesisconductor.ai`, configure these DNS records:
+To use the custom domain `research.genesisconductor.io`, configure these DNS records:
 
 **Option 1: CNAME Record (Recommended)**
 ```
@@ -187,7 +187,7 @@ You can set up a custom subdomain for your worker:
 1. **Add a route in wrangler.toml**:
    ```toml
    routes = [
-     { pattern = "api.research.genesisconductor.ai/*", zone_name = "genesisconductor.ai" }
+     { pattern = "api.research.genesisconductor.io/*", zone_name = "genesisconductor.io" }
    ]
    ```
 
@@ -281,7 +281,7 @@ This project is part of the Genesis Conductor AI research initiative.
 
 ## 🔗 Links
 
-- [Live Application](https://research.genesisconductor.ai)
+- [Live Application](https://research.genesisconductor.io)
 - [AI Studio](https://ai.studio/apps/drive/1VN-izNTkI4aGIbMRUuT5hMBB3hJ6YR8k)
 - [Cloudflare Workers Docs](https://developers.cloudflare.com/workers/)
 - [GitHub Pages Docs](https://docs.github.com/en/pages)

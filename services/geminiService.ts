@@ -3,7 +3,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 // Configuration for API endpoint
 // Production hostnames that should use worker proxy
-const PRODUCTION_HOSTNAMES = ['research.genesisconductor.ai', 'igor-holt.github.io'];
+const PRODUCTION_HOSTNAMES = ['research.genesisconductor.io', 'igor-holt.github.io'];
 const isProduction = PRODUCTION_HOSTNAMES.includes(window.location.hostname);
 const workerEndpoint = process.env.WORKER_ENDPOINT || '';
 const useWorkerProxy = isProduction && workerEndpoint;
