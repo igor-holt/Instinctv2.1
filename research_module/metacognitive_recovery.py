@@ -1,121 +1,116 @@
-import time
-import heapq
-from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+import random
+from enum import Enum
+from dataclasses import dataclass
 
-# --- Widget for Research Paper [1]: Dissonance-Weighted Eviction ---
-# DOI: 10.5281/zenodo.17784838
+# --- Widget for Research Paper [2]: Beyond Retry ---
+# DOI: 10.5281/zenodo.17784144
 
-@dataclass(order=True)
-class MemoryItem:
-    """
-    Represents a stored memory item with a computed eviction score.
-    Lower score = Higher likelihood of eviction.
-    """
-    eviction_score: float
-    timestamp: float
-    key: str = field(compare=False)
-    value: Any = field(compare=False)
-    dissonance: float = field(compare=False) # 0.0 (Resolved) to 1.0 (Highly Conflictual)
+class FailureMode(Enum):
+    TRANSIENT = 1   # Network blip, timeout
+    STRUCTURAL = 2  # API changed, disk full
+    SEMANTIC = 3    # The request itself is impossible (Hallucination)
 
-class DissonanceCache:
+class Strategy(Enum):
+    RETRY_LINEAR = "Retry (Linear Backoff)"
+    RETRY_EXPONENTIAL = "Retry (Exponential Backoff)"
+    STRATEGY_SWITCH = "Switch Implementation"
+    FAIL_FAST = "Abort (Fail Fast)"
+
+@dataclass
+class ErrorContext:
+    error_msg: str
+    attempt_count: int
+    energy_cost: float
+
+class MetacognitiveAgent:
     """
-    Implements the Hybrid LRU Protocol.
+    Implements the Metacognitive Dynamics Framework.
     
-    Unlike standard LRU which only cares about 'when' an item was last used,
-    Dissonance-Weighted Eviction protects items that are 'unresolved' or 'high dissonance',
-    even if they are old. This mimics biological memory consolidation of traumatic/novel events.
+    Instead of a simple try/catch loop, this agent classifies the *dynamics*
+    of the failure to select an optimal recovery strategy.
     """
     
-    def __init__(self, capacity: int, alpha_decay: float = 0.5):
-        self.capacity = capacity
-        self.alpha = alpha_decay
-        self.cache: Dict[str, MemoryItem] = {}
-        self.access_counter = 0
+    def __init__(self):
+        self.history = []
 
-    def _calculate_score(self, last_access_time: float, dissonance: float) -> float:
+    def classify_failure(self, ctx: ErrorContext) -> FailureMode:
         """
-        The Core Equation from Paper [1].
-        Combines Recency (Standard LRU) with Dissonance (Priority).
-        
-        Score = (1 / (Time_Delta + epsilon)) + (Weight * Dissonance)
-        High Score -> KEEP. Low Score -> EVICT.
+        The 'Metacognitive' Step.
+        Analyzes error signature to determine causality.
+        (Simplified logic for widget demonstration).
         """
-        current_time = time.time()
-        time_delta = current_time - last_access_time
-        
-        # Recency Component (Standard LRU)
-        recency_score = 1.0 / (time_delta + 1e-5)
-        
-        # Dissonance Component (The Research Innovation)
-        # We protect high dissonance items from eviction.
-        dissonance_weight = 10.0 # Configurable hyperparameter
-        
-        return recency_score + (dissonance * dissonance_weight)
+        if "timeout" in ctx.error_msg or "503" in ctx.error_msg:
+            return FailureMode.TRANSIENT
+        elif "FileNotFound" in ctx.error_msg or "404" in ctx.error_msg:
+            return FailureMode.STRUCTURAL
+        elif "LogicError" in ctx.error_msg or "Assertion" in ctx.error_msg:
+            return FailureMode.SEMANTIC
+        else:
+            # Fallback: If we've failed 3 times, assume it's Structural, not Transient
+            if ctx.attempt_count > 2:
+                return FailureMode.STRUCTURAL
+            return FailureMode.TRANSIENT
 
-    def put(self, key: str, value: Any, dissonance: float = 0.1):
-        """Insert item with a specific 'cognitive dissonance' score."""
-        if len(self.cache) >= self.capacity:
-            self._evict()
+    def decide_strategy(self, mode: FailureMode, ctx: ErrorContext) -> Strategy:
+        """
+        Maps Failure Mode -> Recovery Strategy
+        """
+        if mode == FailureMode.TRANSIENT:
+            if ctx.attempt_count < 3:
+                return Strategy.RETRY_EXPONENTIAL
+            else:
+                return Strategy.FAIL_FAST # Don't retry forever
+                
+        elif mode == FailureMode.STRUCTURAL:
+            # Paper Innovation: Don't retry structural errors. Switch approach.
+            return Strategy.STRATEGY_SWITCH
             
-        item = MemoryItem(
-            eviction_score=0, # Placeholder, calc below
-            timestamp=time.time(),
-            key=key,
-            value=value,
-            dissonance=dissonance
-        )
-        self.cache[key] = item
-        self._update_scores() # In production, use a heap for O(1) access
-
-    def get(self, key: str) -> Optional[Any]:
-        if key in self.cache:
-            item = self.cache[key]
-            item.timestamp = time.time() # Update Recency
-            # In a real agent, accessing a memory might resolve its dissonance
-            # item.dissonance *= 0.9 
-            self._update_scores()
-            return item.value
-        return None
-
-    def _evict(self):
-        """Finds the item with the LOWEST score (Least Relevant + Least Dissonant)."""
-        if not self.cache:
-            return
+        elif mode == FailureMode.SEMANTIC:
+            # Paper Innovation: Fail fast to save energy (Landauer Context)
+            return Strategy.FAIL_FAST
             
-        # Re-evaluate all scores (O(N) - Simplified for widget demo)
-        self._update_scores()
-        
-        # Find minimum score
-        victim_key = min(self.cache.values(), key=lambda x: x.eviction_score).key
-        print(f"[Eviction Event] Removing '{victim_key}' (Low Relevance/Low Dissonance)")
-        del self.cache[victim_key]
+        return Strategy.FAIL_FAST
 
-    def _update_scores(self):
-        for item in self.cache.values():
-            item.eviction_score = self._calculate_score(item.timestamp, item.dissonance)
+    def execute_task(self, task_name: str, simulate_error: str = None):
+        print(f"\n--- Executing Task: {task_name} ---")
+        attempts = 0
+        
+        while True:
+            attempts += 1
+            print(f"Attempt {attempts}...", end=" ")
+            
+            # Simulate Success/Failure
+            if not simulate_error:
+                print("Success!")
+                break
+                
+            print(f"Failed: {simulate_error}")
+            
+            # 1. Metacognitive Analysis
+            ctx = ErrorContext(simulate_error, attempts, energy_cost=12.5)
+            mode = self.classify_failure(ctx)
+            
+            # 2. Strategic Decision
+            strategy = self.decide_strategy(mode, ctx)
+            print(f"   >>> Metacognition: Mode=[{mode.name}] -> Strategy=[{strategy.value}]")
+            
+            # 3. Execution
+            if strategy == Strategy.FAIL_FAST:
+                print("   >>> Terminating Task to conserve energy.")
+                break
+            elif strategy == Strategy.STRATEGY_SWITCH:
+                print("   >>> Switching to fallback implementation...")
+                simulate_error = None # Assume fallback works
+            elif "RETRY" in strategy.name:
+                time.sleep(0.5) # Simulate backoff
 
 # --- Verification Run ---
 if __name__ == "__main__":
-    print("--- Dissonance-Weighted Eviction Protocol ---")
-    mem = DissonanceCache(capacity=3)
+    agent = MetacognitiveAgent()
     
-    print("1. Adding 'Breakfast' (Low Dissonance - Routine)")
-    mem.put("Breakfast", "Toast", dissonance=0.1)
-    time.sleep(0.1)
+    # Scenario 1: Transient Error (Network)
+    agent.execute_task("Fetch_Data", simulate_error="Connection timeout 503")
     
-    print("2. Adding 'Anomaly_A' (High Dissonance - Unresolved Error)")
-    mem.put("Anomaly_A", "Error_404", dissonance=0.9) 
-    time.sleep(0.1)
-    
-    print("3. Adding 'Lunch' (Low Dissonance - Routine)")
-    mem.put("Lunch", "Sandwich", dissonance=0.1)
-    time.sleep(0.1)
-    
-    print("4. Cache Full. Adding 'Dinner'. Who gets evicted?")
-    # Standard LRU would evict 'Breakfast' (Oldest).
-    # Dissonance LRU should protect 'Anomaly_A' even if it's old, 
-    # and evict 'Breakfast' or 'Lunch' depending on the weight.
-    mem.put("Dinner", "Pizza", dissonance=0.1)
-    
-    print(f"Remaining Memory: {list(mem.cache.keys())}")
+    # Scenario 2: Structural Error (Missing File) - The "Beyond Retry" Logic
+    # Standard agents would retry 3 times. This agent switches strategy immediately.
+    agent.execute_task("Load_Config", simulate_error="FileNotFoundException")
