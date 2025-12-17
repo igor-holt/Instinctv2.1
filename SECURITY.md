@@ -37,7 +37,7 @@ grep -r "AIza" . --exclude-dir=node_modules --exclude-dir=.git
 **Risk**: Unauthorized domains could make requests to the worker, consuming quota.
 
 **Mitigation**:
-- ✅ CORS configured to only allow `research.genesisconductor.ai`
+- ✅ CORS configured to only allow `research.genesisconductor.io`
 - ✅ Preflight requests properly handled
 - ✅ Origin validation on every request
 - ✅ Rejects requests from unauthorized domains
@@ -46,7 +46,7 @@ grep -r "AIza" . --exclude-dir=node_modules --exclude-dir=.git
 ```javascript
 // workers/gemini-proxy.js
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': 'https://research.genesisconductor.ai',
+  'Access-Control-Allow-Origin': 'https://research.genesisconductor.io',
   // ...
 };
 ```

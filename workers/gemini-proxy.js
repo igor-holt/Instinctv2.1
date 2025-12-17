@@ -7,7 +7,7 @@
 
 // CORS headers for the custom domain
 const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': 'https://research.genesisconductor.ai',
+  'Access-Control-Allow-Origin': 'https://research.genesisconductor.io',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Max-Age': '86400',

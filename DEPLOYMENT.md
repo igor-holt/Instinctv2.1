@@ -10,7 +10,7 @@ This checklist ensures all components are properly configured for production dep
 - [ ] Repository settings configured
   - [ ] GitHub Pages enabled
   - [ ] Source set to "GitHub Actions"
-  - [ ] Custom domain added (if using): `research.genesisconductor.ai`
+  - [ ] Custom domain added (if using): `research.genesisconductor.io`
 
 ### 2. DNS Configuration
 
@@ -20,7 +20,7 @@ This checklist ensures all components are properly configured for production dep
   - [ ] A records pointing to GitHub Pages IPs
   - [ ] AAAA records for IPv6 (optional but recommended)
 - [ ] DNS propagation verified (can take 24-48 hours)
-  - Check with: `nslookup research.genesisconductor.ai`
+  - Check with: `nslookup research.genesisconductor.io`
 
 ### 3. Environment Variables
 
@@ -110,7 +110,7 @@ This triggers the GitHub Actions workflow.
 ### Step 5: Verify Deployment
 
 - [ ] Visit `https://igor-holt.github.io/Instinctv2.1/` (if using repo path)
-- [ ] Visit `https://research.genesisconductor.ai` (if using custom domain)
+- [ ] Visit `https://research.genesisconductor.io` (if using custom domain)
 - [ ] Check that the site loads correctly
 - [ ] Test navigation between pages
 - [ ] Verify 404 page redirects work

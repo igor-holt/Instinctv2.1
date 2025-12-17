@@ -109,7 +109,7 @@ This document describes the technical architecture of the Instinct Platform v2.1
 - Repository: `igor-holt/Instinctv2.1`
 - Branch: `main`
 - Source: GitHub Actions
-- Custom Domain: `research.genesisconductor.ai`
+- Custom Domain: `research.genesisconductor.io`
 
 **Features**:
 - Automatic HTTPS
@@ -273,7 +273,7 @@ API Calls (authenticated)
    - Encrypted at rest
 
 2. **CORS Protection**
-   - Only allows `research.genesisconductor.ai`
+   - Only allows `research.genesisconductor.io`
    - Rejects unauthorized origins
    - Preflight request handling
 
