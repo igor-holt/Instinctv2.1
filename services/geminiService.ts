@@ -1,18 +1,8 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-// Configuration for API endpoint
-// Production hostnames that should use worker proxy
-const PRODUCTION_HOSTNAMES = ['research.genesisconductor.io', 'igor-holt.github.io'];
-const isProduction = PRODUCTION_HOSTNAMES.includes(window.location.hostname);
-const workerEndpoint = process.env.WORKER_ENDPOINT || '';
-const useWorkerProxy = isProduction && workerEndpoint;
-
-// For local development, use the API key from environment
-const apiKey = !useWorkerProxy ? (process.env.API_KEY || '') : '';
-
-// Initialize the Google GenAI client only if not using worker proxy
-const ai = !useWorkerProxy && apiKey ? new GoogleGenAI({ apiKey }) : null;
+const apiKey = process.env.API_KEY || '';
+const ai = new GoogleGenAI({ apiKey });
 
 const KATIA_SYSTEM_INSTRUCTION = `You are KATIA (K8), an Automated Techno-Intelligent Assistant for the Instinct Platform.
 
@@ -32,40 +22,13 @@ CAPABILITIES:
 TONE:
 Precise, technical, slightly futuristic, helpful, and authoritative on matters of thermodynamic computing.`;
 
-// Helper function to check if API is available
-function checkApiAvailability() {
-  if (!useWorkerProxy && !apiKey) {
-    return "API_KEY_MISSING";
-  }
-  if (useWorkerProxy && !workerEndpoint) {
-    return "WORKER_ENDPOINT_MISSING";
-  }
-  return null;
-}
-
 // 1. Chatbot (Pro model for complex reasoning with Flash fallback)
 export const streamChatMessage = async function* (
   history: { role: string; parts: { text: string }[] }[],
   message: string
 ) {
-  const apiCheck = checkApiAvailability();
-  if (apiCheck) {
-    yield apiCheck;
-    return;
-  }
-
-  if (useWorkerProxy) {
-    // NOTE: Worker proxy streaming support requires additional implementation
-    // The current worker supports streaming, but the frontend integration needs
-    // to be completed. For now, production mode shows a configuration message.
-    // To enable: implement proper streaming response parsing using the worker's
-    // Transfer-Encoding: chunked responses and SSE (Server-Sent Events) format.
-    yield "Production mode requires Cloudflare Worker setup. Please configure WORKER_ENDPOINT.";
-    return;
-  }
-
-  if (!ai) {
-    yield "API not initialized";
+  if (!apiKey) {
+    yield "API_KEY_MISSING";
     return;
   }
 
@@ -113,16 +76,7 @@ export const streamChatMessage = async function* (
 
 // 2. Section Analysis (Pro model with fallback)
 export const analyzeResearchSection = async (text: string): Promise<string> => {
-  const apiCheck = checkApiAvailability();
-  if (apiCheck === "API_KEY_MISSING") return "API Key Missing";
-  if (apiCheck === "WORKER_ENDPOINT_MISSING") return "Worker Endpoint Missing";
-
-  if (useWorkerProxy) {
-    // TODO: Implement worker proxy support
-    return "Production mode requires Cloudflare Worker setup. Please configure WORKER_ENDPOINT.";
-  }
-
-  if (!ai) return "API not initialized";
+  if (!apiKey) return "API Key Missing";
 
   // Refined prompt for mobile-optimized, high-density technical insight
   const prompt = `Perform a high-density technical analysis of this Instinct Platform documentation excerpt.
@@ -162,15 +116,7 @@ export const analyzeResearchSection = async (text: string): Promise<string> => {
 
 // 3. Task Energy Classification (Flash Lite for speed)
 export const classifyTaskEnergy = async (taskDescription: string) => {
-    const apiCheck = checkApiAvailability();
-    if (apiCheck) return null;
-
-    if (useWorkerProxy) {
-        // TODO: Implement worker proxy support
-        return null;
-    }
-
-    if (!ai) return null;
+    if (!apiKey) return null;
 
     try {
         const response = await ai.models.generateContent({
@@ -202,15 +148,7 @@ export const classifyTaskEnergy = async (taskDescription: string) => {
 
 // 4. Image Editing (Gemini Flash Image)
 export const editImageWithGenAI = async (base64Image: string, prompt: string, mimeType: string) => {
-    const apiCheck = checkApiAvailability();
-    if (apiCheck) return null;
-
-    if (useWorkerProxy) {
-        // TODO: Implement worker proxy support
-        return null;
-    }
-
-    if (!ai) return null;
+    if (!apiKey) return null;
 
     try {
         const response = await ai.models.generateContent({
@@ -240,15 +178,7 @@ export const editImageWithGenAI = async (base64Image: string, prompt: string, mi
 
 // 5. Web Search (Search Grounding)
 export const performWebSearch = async (query: string) => {
-    const apiCheck = checkApiAvailability();
-    if (apiCheck) return null;
-
-    if (useWorkerProxy) {
-        // TODO: Implement worker proxy support
-        return null;
-    }
-
-    if (!ai) return null;
+    if (!apiKey) return null;
 
     try {
         const response = await ai.models.generateContent({
