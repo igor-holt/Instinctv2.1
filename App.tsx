@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { Icons } from './components/Icons';
 import { PAPER_MODULES } from './constants';
 import { ThermodynamicMonitor } from './components/ThermodynamicMonitor';
@@ -637,6 +638,7 @@ export default function App() {
                     </button>
                 )}
             </div>
+            <Analytics />
         </div>
     );
 }
