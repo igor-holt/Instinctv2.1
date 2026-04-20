@@ -1,0 +1,13 @@
+# Instinct v2.1 — Public Release
+
+> Public, declassified version of Instinct.OS.
+> Operating system research by Igor Holt.
+
+## About
+- Public release of Instinct OS research
+- AI-native operating system concepts
+- Part of Genesis Conductor research
+
+## Creator
+Igor Holt — AI Architect
+https://github.com/igor-holt | https://genesisconductor.io
