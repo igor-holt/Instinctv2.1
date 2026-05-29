@@ -1,0 +1,43 @@
+{
+  "$schema": "https://www.schemastore.org/schemas/json/claude-code-marketplace.json",
+  "name": "genesis-conductor-instinctv2-1",
+  "owner": {
+    "name": "Igor Holt (@invariantx)",
+    "email": "iholt@mymail.aacc.edu",
+    "url": "https://github.com/igor-holt"
+  },
+  "description": "Instinctv2.1: public declassified version of Instinct.OS by Igor Holt (@invariantx) for Genesis Conductor agent OS research. AI Studio-derived application exposing core agentic OS primitives for local development and deployment. Provides foundational patterns for autonomous agent runtime, orchestration, and self-hosted AI surfaces that integrate with OpenClaw skills, persistent state, MCP bridges, and the full thermodynamic / diamondNode verification stack.",
+  "version": "1.0.0",
+  "homepage": "https://github.com/igor-holt/Instinctv2.1",
+  "keywords": [
+    "instinctv2-1",
+    "instinct-os",
+    "agent-os",
+    "genesis-conductor",
+    "igor-holt",
+    "invariantx",
+    "declassified",
+    "ai-studio",
+    "autonomous-runtime",
+    "openclaw",
+    "claude-code-marketplace",
+    "self-hosted-ai"
+  ],
+  "plugins": [
+    {
+      "name": "instinctv2-1",
+      "source": "https://github.com/igor-holt/Instinctv2.1",
+      "description": "Declassified public release of Instinct.OS agent runtime foundations. Supports local execution of agentic OS patterns and serves as reference for Genesis Conductor self-hosted and orchestration surfaces.",
+      "version": "1.0.0",
+      "tags": ["agent-os", "declassified", "genesis-conductor", "runtime"],
+      "category": "agent-infrastructure",
+      "homepage": "https://github.com/igor-holt/Instinctv2.1",
+      "keywords": ["instinct v2.1 agent os", "genesis conductor declassified instinct", "agentic os primitives for openclaw"]
+    }
+  ],
+  "links": {
+    "x": "https://x.com/invariantx",
+    "website": "https://genesisconductor.io",
+    "github": "https://github.com/igor-holt/Instinctv2.1"
+  }
+}
